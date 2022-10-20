@@ -3,8 +3,8 @@ const c = canvas.getContext('2d')
 
 const scoreEl = document.querySelector('#scoreEl')
 
-canvas.width = innerWidth
-canvas.height = innerHeight
+canvas.width = 840
+canvas.height = 840
 
 class Boundary {
   static width = 40
@@ -128,19 +128,27 @@ let lastKey = ''
 let score = 0
 
 const map = [
-  ['1', '-', '-', '-', '-', '-', '-', '-', '-', '-', '2'],
-  ['|', '.', '.', '.', '.', '.', '.', '.', '.', '.', '|'],
-  ['|', '.', 'b', '.', '[', '7', ']', '.', 'b', '.', '|'],
-  ['|', '.', '.', '.', '.', '_', '.', '.', '.', '.', '|'],
-  ['|', '.', '[', ']', '.', '.', '.', '[', ']', '.', '|'],
-  ['|', '.', '.', '.', '.', '^', '.', '.', '.', '.', '|'],
-  ['|', '.', 'b', '.', '[', '+', ']', '.', 'b', '.', '|'],
-  ['|', '.', '.', '.', '.', '_', '.', '.', '.', '.', '|'],
-  ['|', '.', '[', ']', '.', '.', '.', '[', ']', '.', '|'],
-  ['|', '.', '.', '.', '.', '^', '.', '.', '.', '.', '|'],
-  ['|', '.', 'b', '.', '[', '5', ']', '.', 'b', '.', '|'],
-  ['|', '.', '.', '.', '.', '.', '.', '.', '.', 'p', '|'],
-  ['4', '-', '-', '-', '-', '-', '-', '-', '-', '-', '3']
+    ['g', 'P', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g'],
+    ['g', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'g'],
+    ['g', '.', 'g', 'S', 'g', 'S', 'g', '.', 'g', 'N', 'g', '.', 'g', '.', 'g', '.', 'g', '.', 'g', '.', 'g'],
+    ['g', '.', '.', '.', '.', '.', 'E', '.', 'g', '.', 'g', '.', 'g', '.', 'E', '.', '.', '.', 'W', '.', 'g'],
+    ['g', '.', 'g', 'g', '.', 'g', 'g', '.', 'g', '.', 'g', 'N', 'g', '.', 'g', 'g', '.', 'g', 'g', '.', 'g'],
+    ['g', '.', 'E', '.', '.', 'E', '.', '.', 'g', '.', 'E', '.', 'g', '.', '.', 'W', '.', '.', 'W', '.', 'g'],
+    ['g', '.', 'g', 'S', '.', 'g', 'g', '.', 'g', '.', 'g', '.', 'g', '.', 'g', 'g', 'g', 'S', 'g', '.', 'g'],
+    ['g', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'g'],
+    ['g', '.', 'g', 'g', 'g', '.', 'g', '.', 'g', 'g', 'g', '.', 'g', '.', 'g', 'N', 'g', 'g', 'g', '.', 'g'],
+    ['g', '.', 'W', 'C', 'g', '.', 'E', '.', 'g', 'C', 'g', '.', '.', '.', '.', '.', '.', 'E', '.', '.', 'g'],
+    ['g', '.', 'g', '.', 'g', '.', 'g', '.', 'g', '.', 'g', 'N', 'g', '.', 'g', 'g', '.', 'g', 'g', '.', 'g'],
+    ['g', '.', '.', '.', 'g', '.', '.', '.', 'W', '.', '.', '.', '.', '.', 'g', 'C', '.', 'E', '.', '.', 'g'],
+    ['g', '.', 'g', 'g', 'g', 'N', 'g', '.', 'g', '.', 'g', 'N', 'g', '.', 'g', 'g', 'g', 'g', 'g', '.', 'g'],
+    ['g', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'g'],
+    ['g', '.', 'g', 'N', 'g', 'N', 'g', '.', 'g', 'S', '.', 'N', 'g', '.', 'g', 'g', '.', 'g', 'g', '.', 'g'],
+    ['g', '.', '.', '.', '.', '.', '.', '.', 'g', '.', '.', '.', '.', '.', 'g', 'C', '.', '.', 'W', '.', 'g'],
+    ['g', '.', 'g', '.', 'g', 'N', 'g', '.', 'g', '.', 'g', '.', 'W', '.', 'g', 'g', 'g', '.', 'g', '.', 'g'],
+    ['g', '.', '.', '.', 'W', 'C', 'g', '.', 'W', '.', '.', '.', '.', '.', '.', '.', 'W', '.', 'g', '.', 'g'],
+    ['g', '.', 'g', 'g', 'g', '.', 'g', '.', 'g', 'N', 'g', 'S', 'g', '.', 'g', '.', 'g', '.', 'g', '.', 'g'],
+    ['g', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'H'],
+    ['g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g']
 ]
 
 function createImage(src) {
@@ -163,28 +171,94 @@ map.forEach((row, i) => {
           })
         )
         break
-      case '|':
+      case 'g':
         boundaries.push(
           new Boundary({
             position: {
               x: Boundary.width * j,
               y: Boundary.height * i
             },
-            image: createImage('./img/pipeVertical.png')
+            image: createImage('./img/grass.png')
           })
         )
         break
-      case '1':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: Boundary.width * j,
-              y: Boundary.height * i
-            },
-            image: createImage('./img/pipeCorner1.png')
-          })
-        )
-        break
+        case 'S':
+            boundaries.push(
+                new Boundary({
+                    position: {
+                        x: Boundary.width * j,
+                        y: Boundary.height * i
+                    },
+                    image: createImage('./img/house-south.png')
+                })
+            )
+            break
+        case 'N':
+            boundaries.push(
+                new Boundary({
+                    position: {
+                        x: Boundary.width * j,
+                        y: Boundary.height * i
+                    },
+                    image: createImage('./img/house-north.png')
+                })
+            )
+            break
+        case 'E':
+            boundaries.push(
+                new Boundary({
+                    position: {
+                        x: Boundary.width * j,
+                        y: Boundary.height * i
+                    },
+                    image: createImage('./img/house-east.png')
+                })
+            )
+            break
+        case 'W':
+            boundaries.push(
+                new Boundary({
+                    position: {
+                        x: Boundary.width * j,
+                        y: Boundary.height * i
+                    },
+                    image: createImage('./img/house-west.png')
+                })
+            )
+            break
+        case 'H':
+            boundaries.push(
+                new Boundary({
+                    position: {
+                        x: Boundary.width * j,
+                        y: Boundary.height * i
+                    },
+                    image: createImage('./img/hospital.png')
+                })
+            )
+            break
+        case 'P':
+            boundaries.push(
+                new Boundary({
+                    position: {
+                        x: Boundary.width * j,
+                        y: Boundary.height * i
+                    },
+                    image: createImage('./img/home.png')
+                })
+            )
+            break
+        case 'C':
+            boundaries.push(
+                new Boundary({
+                    position: {
+                        x: Boundary.width * j,
+                        y: Boundary.height * i
+                    },
+                    image: createImage('./img/store-available.png')
+                })
+            )
+            break
       case '2':
         boundaries.push(
           new Boundary({
