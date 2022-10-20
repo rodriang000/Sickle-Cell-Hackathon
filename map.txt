@@ -1,21 +1,32 @@
-G///////O//////////
-/%S%S%/%N%/%/%/%/%/
-//O/OEO%C%O%/EO/OW/
-/%%/%%/%/%N%/%%/%%/
-/EO/EO/%/EO%/OW/OW/
-/%S/%%/%/%/%/%%%S%/
-//O///////////O/O//
-/%%%/%/%%%/%/%N%%%/
-OWC%/EO%C%O/////EO/
-/%/%/%/%/%N%/%%/%%/
-///%O%OW//O//%C/EO/
-/%%%N%/%/%N%/%%%%%/
-//O/O/////O////////
-/%N%N%/%S%N%/%%/%%/
-////O//%O////%C/OW/
-/%/%N%/%/%OW/%%%/%/
-//OWC%OWO/////OW/%/
-/%%%/%/%N%S%/%/%/%/
-//////////O///////H
-
+gggggggggggggggggggg
+gP///////O//////////g
+g/%S%S%/%N%/%/%/%/%/g
+g//O/OEO%C%O%/EO/OW/g
+g/%%/%%/%/%N%/%%/%%/g
+g/EO/EO/%/EO%/OW/OW/g
+g/%S/%%/%/%/%/%%%S%/g
+g//O///////////O/O//g
+g/%%%/%/%%%/%/%N%%%/g
+gOWC%/EO%C%O/////EO/g
+g/%/%/%/%/%N%/%%/%%/g
+g///%O%OW//O//%C/EO/g
+g/%%%N%/%/%N%/%%%%%/g
+g//O/O/////O////////g
+g/%N%N%/%S%N%/%%/%%/g
+g////O//%O////%C/OW/g
+g/%/%N%/%/%OW/%%%/%/g
+g//OWC%OWO/////OW/%/g
+g/%%%/%/%N%S%/%/%/%/g
+g//////////O////////H
+ggggggggggggggggggggg
 *add grass % border around entire grid and move starting house G/hospital H into the border
+
+% or g grass
+/ road
+P home
+O Objective
+S South house
+N North house
+E East house
+W West
+C Convience
