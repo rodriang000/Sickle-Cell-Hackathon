@@ -1,0 +1,21 @@
+G///////O//////////
+/%S%S%/%N%/%/%/%/%/
+//O/OEO%C%O%/EO/OW/
+/%%/%%/%/%N%/%%/%%/
+/EO/EO/%/EO%/OW/OW/
+/%S/%%/%/%/%/%%%S%/
+//O///////////O/O//
+/%%%/%/%%%/%/%N%%%/
+OWC%/EO%C%O/////EO/
+/%/%/%/%/%N%/%%/%%/
+///%O%OW//O//%C/EO/
+/%%%N%/%/%N%/%%%%%/
+//O/O/////O////////
+/%N%N%/%S%N%/%%/%%/
+////O//%O////%C/OW/
+/%/%N%/%/%OW/%%%/%/
+//OWC%OWO/////OW/%/
+/%%%/%/%N%S%/%/%/%/
+//////////O///////H
+
+*add grass % border around entire grid and move starting house G/hospital H into the border
