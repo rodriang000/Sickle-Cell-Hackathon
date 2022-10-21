@@ -4,7 +4,8 @@ const c = canvas.getContext('2d')
 const scoreEl = document.querySelector('#scoreEl')
 const time = document.querySelector('#timer')
 const crisisTime = document.querySelector('#crisisTimer')
-
+var packageCounter = document.getElementById("packageCounter");
+console.log(packageCounter);
 canvas.width = 840
 canvas.height = 840
 
@@ -15,7 +16,6 @@ var faceLeft = false
 //Beginning timers
 var timeStart = Date.now()
 var timeElapsed = timeStart
-
 var painMeterStart = Date.now()
 var healMeterStart = Date.now()
 var crisisMeterStart = Date.now()
@@ -569,13 +569,14 @@ function animate() {
         speedKey = 'h'
       } else if (pellet.key == 'p') {
         player.packages = 5
+        globalPackage = 5
       } else {
         if (player.packages > 0) {
           pellets.splice(i, 1)
           score += 10
           scoreEl.innerHTML = score
           player.packages -= 1
-
+          globalPackage -= 1
           boxSound = boxSfx[Math.floor(Math.random() * 3)]
           boxSound.play();
         } else {
@@ -607,12 +608,12 @@ function animate() {
 
   // Calculate player speed
   speed = calculatePlayerSpeed(speedKey)
-} // end of animate()
 
+} // end of animate()
 animate()
 
 function calculatePlayerSpeed(speedKey) {
-  console.log(speedKey)
+  // console.log(speedKey)
   if (speedKey == ' ')
   {
     return runNormalCalculation()
@@ -639,7 +640,9 @@ function calculatePlayerSpeed(speedKey) {
 
 function runNormalCalculation(){
     // Normal logic
-    console.log(speed)
+    packageCounter.innerHTML = 2
+    document.getElementById("packageCounter").innerHTML = player.packages
+    //console.log(speed)
     let delta = Date.now() - timeStart; // milliseconds elapsed since start
     time.innerHTML = Math.round(delta / 1000);
     let bar = document.getElementById("painBar");
