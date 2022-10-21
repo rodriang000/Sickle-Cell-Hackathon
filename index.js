@@ -1,11 +1,9 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
-const scoreEl = document.querySelector('#scoreEl')
 const time = document.querySelector('#timer')
+const packageCount = document.querySelector('#packageCounter')
 const crisisTime = document.querySelector('#crisisTimer')
-var packageCounter = document.getElementById("packageCounter");
-console.log(packageCounter);
 canvas.width = 840
 canvas.height = 840
 
@@ -214,7 +212,7 @@ const keys = {
 }
 
 let lastKey = ''
-let score = 0
+
 
 const map = [
     ['g', 'P', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g'],
@@ -573,8 +571,6 @@ function animate() {
       } else {
         if (player.packages > 0) {
           pellets.splice(i, 1)
-          score += 10
-          scoreEl.innerHTML = score
           player.packages -= 1
           globalPackage -= 1
           boxSound = boxSfx[Math.floor(Math.random() * 3)]
@@ -640,9 +636,7 @@ function calculatePlayerSpeed(speedKey) {
 
 function runNormalCalculation(){
     // Normal logic
-    packageCounter.innerHTML = 2
-    document.getElementById("packageCounter").innerHTML = player.packages
-    //console.log(speed)
+    document.getElementById('packageCounter').innerHTML = player.packages.toString()
     let delta = Date.now() - timeStart; // milliseconds elapsed since start
     time.innerHTML = Math.round(delta / 1000);
     let bar = document.getElementById("painBar");
