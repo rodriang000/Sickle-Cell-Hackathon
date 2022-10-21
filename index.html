@@ -1,12 +1,36 @@
 <style>
     body {
-      margin: 0;  
+      margin: 0;
       background-color: black;
       padding: 10px 20px;
     }
+    #painProgress {
+        float: left;
+        color: darkred;
+        height: 300px;
+        background-color: darkred;
+    }
+    #painBar {
+        width: 40px;
+        height: 300px;
+        text-align: center; /* To center it horizontally (if you want) */
+        line-height: 30px; /* To center it vertically */
+        color: white;
+        background: grey
+    }
+
     </style>
     <p style="color: white; font-family: sans-serif; font-size: 14px; margin-bottom: 6px;">
       <span>Score: </span><span id="scoreEl">0</span>
     </p>
-    <canvas></canvas>
-    <script src="index.js"></script>
+    <p style="color: white; font-family: sans-serif; font-size: 14px; margin-bottom: 6px;">
+        <span>Time: </span><span id="timer">0</span>
+    </p>
+    <div>
+        <div id="painProgress">
+            <div id="painBar"></div>
+        </div>
+        <canvas></canvas>
+        <script src="index.js">
+        </script>
+    </div>
