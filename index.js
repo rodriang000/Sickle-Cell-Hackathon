@@ -563,6 +563,13 @@ function animate() {
   else if (player.velocity.y > 0) player.rotation = Math.PI / 2
   else if (player.velocity.y < 0) player.rotation = Math.PI * 1.5
 
+  // Calculate player speed
+  speed = calculatePlayerSpeed()
+} // end of animate()
+
+animate()
+
+function calculatePlayerSpeed() {
   var delta = Date.now() - timeStart; // milliseconds elapsed since start
   time.innerHTML = Math.round(delta / 1000);
 
@@ -612,9 +619,8 @@ function animate() {
     if (speed < .5) {
         speed = .5
     }
-} // end of animate()
-
-animate()
+    return speed
+}
 
 addEventListener('keydown', ({ key }) => {
   switch (key) {
