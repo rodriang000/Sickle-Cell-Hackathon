@@ -9,7 +9,7 @@ canvas.height = 840
 class Boundary {
   static width = 40
   static height = 40
-  constructor({ position, image }) {
+  constructor({ position, image}) {
     this.position = position
     this.width = 40
     this.height = 40
@@ -187,11 +187,12 @@ map.forEach((row, i) => {
                 new Boundary({
                     position: {
                         x: Boundary.width * j,
-                        y: Boundary.height * i
+                        y: Boundary.height * i,
                     },
                     image: createImage('./img/house-south.png')
                 })
             )
+            // console.log("S: ", "[", [i], ",", [j], "]" )
             break
         case 'N':
             boundaries.push(
@@ -203,6 +204,7 @@ map.forEach((row, i) => {
                     image: createImage('./img/house-north.png')
                 })
             )
+            // console.log("N: ", "[", [i], ",", [j], "]" )
             break
         case 'E':
             boundaries.push(
@@ -214,6 +216,8 @@ map.forEach((row, i) => {
                     image: createImage('./img/house-east.png')
                 })
             )
+            // console.log("E: ", "[", [i], ",", [j], "]" )
+
             break
         case 'W':
             boundaries.push(
@@ -225,6 +229,7 @@ map.forEach((row, i) => {
                     image: createImage('./img/house-west.png')
                 })
             )
+            // console.log("W: ", "[", [i], ",", [j], "]" )
             break
         case 'H':
             boundaries.push(
