@@ -21,7 +21,8 @@ var healMeterStart = Date.now()
 var crisisMeterStart = Date.now()
 var painMeterMaxTime = 30000
 var healMeterTime = 20000
-var crisisMeterTime = 40000
+var crisisMeterTime = 25000 // 40,000 ~ 40seconds
+var currPain
 
 var barHeight = 100
 var speed = 4
@@ -59,13 +60,13 @@ var hackyAnimationTime = Date.now()
 var boxSfx = [new Audio("./sfx/box1.mp3"), new Audio("./sfx/box2.mp3"), new Audio("./sfx/box3.mp3")]
 
 var songNormal = new Audio("./sfx/songNormal.mp3")
-songNormal.volume = 0.4
+songNormal.volume = 0.1
 songNormal.loop = true
 
 var songInit = false
 
 var sadSong = new Audio("./sfx/sadSong.mp3")
-sadSong.volume = 0.5
+sadSong.volume = 0.1
 sadSong.loop = true
 
 
@@ -414,6 +415,7 @@ function circleCollidesWithRectangle({ circle, rectangle }) {
 let animationId
 function animate() {
   animationId = requestAnimationFrame(animate)
+  let speedKey = " "
   c.clearRect(0, 0, canvas.width, canvas.height)
 
     //constantly updates speed of current direction.
@@ -557,17 +559,14 @@ function animate() {
       pellet.radius + player.radius
     ) {
       if (pellet.key == 'w') {
-        //TODO: Implement w logic
-        // Decreases stress 10%
-        // Remove 15 percent
-        pellets.splice(i, 1)
-         console.log(barHeight)
-         var waterSfx = new Audio("./sfx/water.mp3")
-      }
-      if (pellet.key == 'h') {
-        // TODO: implement h logic
-          var healSfx = new Audio("./sfx/Hospital.mp3")
-          healSfx.play()
+        if (status == "stressIncrease"){
+          pellets.splice(i, 1)
+          var waterSfx = new Audio("./sfx/water.mp3")
+          waterSfx.play()
+          speedKey = 'w'
+        }
+      } else if (pellet.key == 'h') {
+        speedKey = 'h'
       } else if (pellet.key == 'p') {
         player.packages = 5
       } else {
@@ -607,32 +606,64 @@ function animate() {
   else if (player.velocity.y < 0) player.rotation = Math.PI * 1.5
 
   // Calculate player speed
-  speed = calculatePlayerSpeed()
+  speed = calculatePlayerSpeed(speedKey)
 } // end of animate()
 
 animate()
 
-function calculatePlayerSpeed() {
-  var delta = Date.now() - timeStart; // milliseconds elapsed since start
-  time.innerHTML = Math.round(delta / 1000);
+function calculatePlayerSpeed(speedKey) {
+  console.log(speedKey)
+  if (speedKey == ' ')
+  {
+    return runNormalCalculation()
+  }
+  if (speedKey == 'w') {
+    // Only when status is stress increase should any of this logic occur
+    if (status == "stressIncrease") {
+      painMeterStart += 15000
 
-    var bar = document.getElementById("painBar");
+      if (painMeterStart - Date.now() - currPain >= 0) {
+        painMeterStart = Date.now()
+      }
+      return runNormalCalculation()
+    }
+  } else if (speedKey == 'h') {
+    if (status == "crisis") {
+      crisisMeterStart = Date.now() - 2000000
+      var healSfx = new Audio("./sfx/Hospital.mp3")
+      healSfx.play()
+    }
+    return runNormalCalculation()
+  }
+}
 
-    var currPain = Date.now() - painMeterStart;
+function runNormalCalculation(){
+    // Normal logic
+    console.log(speed)
+    let delta = Date.now() - timeStart; // milliseconds elapsed since start
+    time.innerHTML = Math.round(delta / 1000);
+    let bar = document.getElementById("painBar");
+  
+    // Update currPain, currHeal, or currCrisis
+    currPain = Date.now() - painMeterStart;
     if (currPain > painMeterMaxTime) {
         currPain = painMeterMaxTime
     }
+    
+    if (currPain < 0) {
+      currPain = 0
+    }
 
-    var currHeal = Date.now() - healMeterStart;
+    currHeal = Date.now() - healMeterStart;
     if (currHeal > healMeterTime) {
         currHeal = healMeterTime
     }
-
-    var currCrisis = Date.now() - crisisMeterStart;
+  
+    currCrisis = Date.now() - crisisMeterStart;
     if (currCrisis > crisisMeterTime) {
         currCrisis = crisisMeterTime
     }
-
+  
     if (status == "stressIncrease") {
         barHeight = 100 * (currPain / painMeterMaxTime);
         if (barHeight >= 100) {
@@ -652,24 +683,23 @@ function calculatePlayerSpeed() {
             songNormal.play()
         }
         crisisTime.innerHTML = Math.round((crisisMeterTime - currCrisis) / 1000)
-    }
+      }
     else if (status == "crisisHealing") {
-        barHeight = 100 - (100* (currHeal / healMeterTime))
+        barHeight = 100 - (100 * (currHeal / healMeterTime))
         if (barHeight <= 0) {
             status = "stressIncrease"
             painMeterStart = Date.now()
         }
     }
-
+  
     bar.style.height = 100 - barHeight + "%";
     bar.innerHTML = Math.round(barHeight) + "%";
-    speed = 4 - ( 4 * (barHeight /  100))
+    speed = 2.7 - ( 2.3 * (barHeight /  100))
     if (speed < .5) {
-        speed = .5
+        speed = .7
     }
     return speed
 }
-
 addEventListener('keydown', ({ key }) => {
   switch (key) {
     case 'w':
