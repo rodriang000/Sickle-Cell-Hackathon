@@ -38,21 +38,19 @@ class Boundary {
   }
 
   draw() {
-    // c.fillStyle = 'blue'
-    // c.fillRect(this.position.x, this.position.y, this.width, this.height)
-
     c.drawImage(this.image, this.position.x, this.position.y)
   }
 }
 
 class Player {
-  constructor({ position, velocity }) {
+  constructor({ position, velocity, packages = 5 }) {
     this.position = position
     this.velocity = velocity
     this.radius = 15
     this.radians = 0.75
     this.openRate = 0.12
     this.rotation = 0
+    this.packages = packages
   }
 
   draw() {
@@ -476,7 +474,6 @@ function animate() {
   for (let i = pellets.length - 1; 0 <= i; i--) {
     const pellet = pellets[i]
     pellet.draw()
-
     if (
       Math.hypot(
         pellet.position.x - player.position.x,
@@ -486,21 +483,26 @@ function animate() {
     ) {
       if (pellet.key == 'w') {
         //TODO: Implement w logic
-
-        // Remove the convience store
+        // Decreases stress 10%
+        // Remove 15 percent
         pellets.splice(i, 1)
-        score += 10
+        console.log(barHeight)
+
       }
       if (pellet.key == 'h') {
         // TODO: implement h logic
-        console.log("Hit h!")
       } else if (pellet.key == 'p') {
-        console.log("Hit p")
-        // TODO: implement p logic
+        player.packages = 5
       } else {
-        pellets.splice(i, 1)
-        score += 10
-        scoreEl.innerHTML = score }
+        if (player.packages > 0) {
+          pellets.splice(i, 1)
+          score += 10
+          scoreEl.innerHTML = score 
+          player.packages -= 1
+        } else {
+          console.log("You need more packages!")
+        }         
+      } 
     }
   }
 
