@@ -77,18 +77,34 @@ class Player {
 
 
 class Pellet {
-  constructor({ position, coordinates}) {
+  constructor({ position, coordinates, key = " ", enabled = false}) {
     this.position = position
     this.radius = 3
     this.coordinates = coordinates
+    this.key = key
+    this.enabled = enabled
   }
 
   draw() {
-    c.beginPath()
-    c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
-    c.fillStyle = 'white'
-    c.fill()
-    c.closePath()
+    switch (this.key) {
+      case 'h':
+        c.drawImage(createImage('./img/heal.png'), this.position.x - 20, this.position.y - 20)
+        break
+      case 'p':
+        c.drawImage(createImage('./img/package-pickup.png'), this.position.x - 20, this.position.y - 20)
+        break
+      case 'w':
+          c.drawImage(createImage('./img/store-available.png'), this.position.x - 20, this.position.y- 20)
+        break
+      case '':
+        break    
+      default:
+        c.beginPath()
+        c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+        c.fillStyle = 'white'
+        c.fill()
+        c.closePath()      
+    }
   }
 }
 
@@ -140,25 +156,25 @@ let score = 0
 
 const map = [
     ['g', 'P', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g'],
-    ['g', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '.', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'g'],
+    ['g', 'p', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '.', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'g'],
     ['g', ' ', 'g', 'S', 'g', 'S', 'g', ' ', 'g', 'N', 'g', ' ', 'g', ' ', 'g', ' ', 'g', ' ', 'g', ' ', 'g'],
-    ['g', ' ', ' ', '.', ' ', '.', 'E', '.', 'g', ' ', 'g', '.', 'g', ' ', 'E', '.', ' ', '.', 'W', ' ', 'g'],
+    ['g', ' ', ' ', '.', ' ', '.', 'E', '.', 'g', 'w', 'g', '.', 'g', ' ', 'E', '.', ' ', '.', 'W', ' ', 'g'],
     ['g', ' ', 'g', 'g', ' ', 'g', 'g', ' ', 'g', ' ', 'g', 'N', 'g', ' ', 'g', 'g', ' ', 'g', 'g', ' ', 'g'],
     ['g', ' ', 'E', '.', ' ', 'E', '.', ' ', 'g', ' ', 'E', '.', 'g', ' ', '.', 'W', ' ', '.', 'W', ' ', 'g'],
     ['g', ' ', 'g', 'S', ' ', 'g', 'g', ' ', 'g', ' ', 'g', ' ', 'g', ' ', 'g', 'g', 'g', 'S', 'g', ' ', 'g'],
     ['g', ' ', ' ', '.', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '.', ' ', '.', ' ', ' ', 'g'],
     ['g', ' ', 'g', 'g', 'g', ' ', 'g', ' ', 'g', 'g', 'g', ' ', 'g', ' ', 'g', 'N', 'g', 'g', 'g', ' ', 'g'],
-    ['g', '.', 'W', 'C', 'g', ' ', 'E', '.', 'g', 'C', 'g', '.', ' ', ' ', ' ', ' ', ' ', 'E', '.', ' ', 'g'],
+    ['g', '.', 'W', 'w', 'g', ' ', 'E', '.', 'g', 'w', 'g', '.', ' ', ' ', ' ', ' ', ' ', 'E', '.', ' ', 'g'],
     ['g', ' ', 'g', ' ', 'g', ' ', 'g', ' ', 'g', ' ', 'g', 'N', 'g', ' ', 'g', 'g', ' ', 'g', 'g', ' ', 'g'],
-    ['g', ' ', ' ', ' ', 'g', '.', ' ', '.', 'W', ' ', ' ', '.', ' ', ' ', 'g', 'C', ' ', 'E', '.', ' ', 'g'],
+    ['g', ' ', ' ', ' ', 'g', '.', ' ', '.', 'W', ' ', ' ', '.', ' ', ' ', 'g', 'w', ' ', 'E', '.', ' ', 'g'],
     ['g', ' ', 'g', 'g', 'g', 'N', 'g', ' ', 'g', ' ', 'g', 'N', 'g', ' ', 'g', 'g', 'g', 'g', 'g', ' ', 'g'],
     ['g', ' ', ' ', '.', ' ', '.', ' ', ' ', ' ', ' ', ' ', '.', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'g'],
     ['g', ' ', 'g', 'N', 'g', 'N', 'g', ' ', 'g', 'S', ' ', 'N', 'g', ' ', 'g', 'g', ' ', 'g', 'g', ' ', 'g'],
-    ['g', ' ', ' ', ' ', ' ', '.', ' ', ' ', 'g', '.', ' ', ' ', ' ', ' ', 'g', 'C', ' ', '.', 'W', ' ', 'g'],
+    ['g', ' ', ' ', ' ', ' ', '.', ' ', ' ', 'g', '.', ' ', ' ', ' ', ' ', 'g', 'w', ' ', '.', 'W', ' ', 'g'],
     ['g', ' ', 'g', ' ', 'g', 'N', 'g', ' ', 'g', ' ', 'g', '.', 'W', ' ', 'g', 'g', 'g', ' ', 'g', ' ', 'g'],
-    ['g', ' ', ' ', '.', 'W', 'C', 'g', '.', 'W', '.', ' ', ' ', ' ', ' ', ' ', '.', 'W', ' ', 'g', ' ', 'g'],
+    ['g', ' ', ' ', '.', 'W', 'w', 'g', '.', 'W', '.', ' ', ' ', ' ', ' ', ' ', '.', 'W', ' ', 'g', ' ', 'g'],
     ['g', ' ', 'g', 'g', 'g', ' ', 'g', ' ', 'g', 'N', 'g', 'S', 'g', ' ', 'g', ' ', 'g', ' ', 'g', ' ', 'g'],
-    ['g', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '.', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'H'],
+    ['g', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '.', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'h', 'H'],
     ['g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g']
 ]
 
@@ -272,163 +288,6 @@ map.forEach((row, i) => {
                 })
             )
             break
-        case 'C':
-            boundaries.push(
-                new Boundary({
-                    position: {
-                        x: Boundary.width * j,
-                        y: Boundary.height * i
-                    },
-                    image: createImage('./img/store-available.png')
-                })
-            )
-            break
-      case '2':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: Boundary.width * j,
-              y: Boundary.height * i
-            },
-            image: createImage('./img/pipeCorner2.png')
-          })
-        )
-        break
-      case '3':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: Boundary.width * j,
-              y: Boundary.height * i
-            },
-            image: createImage('./img/pipeCorner3.png')
-          })
-        )
-        break
-      case '4':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: Boundary.width * j,
-              y: Boundary.height * i
-            },
-            image: createImage('./img/pipeCorner4.png')
-          })
-        )
-        break
-      case 'b':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: Boundary.width * j,
-              y: Boundary.height * i
-            },
-            image: createImage('./img/block.png')
-          })
-        )
-        break
-      case '[':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: j * Boundary.width,
-              y: i * Boundary.height
-            },
-            image: createImage('./img/capLeft.png')
-          })
-        )
-        break
-      case ']':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: j * Boundary.width,
-              y: i * Boundary.height
-            },
-            image: createImage('./img/capRight.png')
-          })
-        )
-        break
-      case '_':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: j * Boundary.width,
-              y: i * Boundary.height
-            },
-            image: createImage('./img/capBottom.png')
-          })
-        )
-        break
-      case '^':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: j * Boundary.width,
-              y: i * Boundary.height
-            },
-            image: createImage('./img/capTop.png')
-          })
-        )
-        break
-      case '+':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: j * Boundary.width,
-              y: i * Boundary.height
-            },
-            image: createImage('./img/pipeCross.png')
-          })
-        )
-        break
-      case '5':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: j * Boundary.width,
-              y: i * Boundary.height
-            },
-            color: 'blue',
-            image: createImage('./img/pipeConnectorTop.png')
-          })
-        )
-        break
-      case '6':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: j * Boundary.width,
-              y: i * Boundary.height
-            },
-            color: 'blue',
-            image: createImage('./img/pipeConnectorRight.png')
-          })
-        )
-        break
-      case '7':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: j * Boundary.width,
-              y: i * Boundary.height
-            },
-            color: 'blue',
-            image: createImage('./img/pipeConnectorBottom.png')
-          })
-        )
-        break
-      case '8':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: j * Boundary.width,
-              y: i * Boundary.height
-            },
-            image: createImage('./img/pipeConnectorLeft.png')
-          })
-        )
-        break
       case '.':
         pellets.push(
           new Pellet({
@@ -440,17 +299,39 @@ map.forEach((row, i) => {
           })
         )
         break
-
-      case 'p':
-        powerUps.push(
-          new PowerUp({
-            position: {
-              x: j * Boundary.width + Boundary.width / 2,
-              y: i * Boundary.height + Boundary.height / 2
-            }
-          })
-        )
-        break
+        case 'h':
+          pellets.push(
+            new Pellet({
+              position: {
+                x: j * Boundary.width + Boundary.width / 2,
+                y: i * Boundary.height + Boundary.height / 2
+              },
+              key : 'h'
+            })
+          )
+          break
+        case 'p':
+          pellets.push(
+            new Pellet({
+              position: {
+                x: j * Boundary.width + Boundary.width / 2,
+                y: i * Boundary.height + Boundary.height / 2
+              },
+              key : 'p'
+            })
+          )
+          break
+          case 'w':
+            pellets.push(
+              new Pellet({
+                position: {
+                  x: j * Boundary.width + Boundary.width / 2,
+                  y: i * Boundary.height + Boundary.height / 2
+                },
+                key : 'w'
+              })
+            )
+            break
     }
   })
 })
@@ -579,9 +460,23 @@ function animate() {
       ) <
       pellet.radius + player.radius
     ) {
-      pellets.splice(i, 1)
-      score += 10
-      scoreEl.innerHTML = score
+      if (pellet.key == 'w') {
+        //TODO: Implement w logic
+
+        // Remove the convience store
+        pellets.splice(i, 1)
+        score += 10
+      }
+      if (pellet.key == 'h') {
+        // TODO: implement h logic
+        console.log("Hit h!")
+      } else if (pellet.key == 'p') {
+        console.log("Hit p")
+        // TODO: implement p logic
+      } else {
+        pellets.splice(i, 1)
+        score += 10
+        scoreEl.innerHTML = score }
     }
   }
 
