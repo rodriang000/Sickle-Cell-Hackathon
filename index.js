@@ -56,6 +56,21 @@ spriteRF.src = "./img/right-png/fnum6.png";
 
 var hackyAnimationTime = Date.now()
 
+var boxSfx = [new Audio("./sfx/box1.mp3"), new Audio("./sfx/box2.mp3"), new Audio("./sfx/box3.mp3")]
+
+var songNormal = new Audio("./sfx/songNormal.mp3")
+songNormal.volume = 0.4
+songNormal.loop = true
+
+var songInit = false
+
+var sadSong = new Audio("./sfx/sadSong.mp3")
+sadSong.volume = 0.5
+sadSong.loop = true
+
+
+var painAudio = new Audio("./sfx/pain.wav")
+
 var spriteLeftArray = [spriteLA, spriteLB, spriteLC, spriteLD, spriteLE, spriteLF]
 var spriteRightArray = [spriteRA, spriteRB, spriteRC, spriteRD, spriteRE, spriteRF]
 
@@ -143,13 +158,13 @@ class Pellet {
           c.drawImage(createImage('./img/store-available.png'), this.position.x - 20, this.position.y- 20)
         break
       case '':
-        break    
+        break
       default:
         c.beginPath()
         c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
         c.fillStyle = 'white'
         c.fill()
-        c.closePath()      
+        c.closePath()
     }
   }
 }
@@ -434,8 +449,13 @@ function animate() {
         break
       } else {
           player.velocity.y = -speed
-      }
-    }
+        }
+        }
+        //Hack for init song
+        if (!songInit) {
+            songNormal.play()
+            songInit = true;
+        }
   } else if (keys.a.pressed && lastKey === 'a') {
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i]
@@ -455,8 +475,14 @@ function animate() {
         break
       } else {
           player.velocity.x = -speed
-      }
-    }
+        }
+
+        }
+        //Hack for init song
+        if (!songInit) {
+            songNormal.play()
+            songInit = true;
+        }
   } else if (keys.s.pressed && lastKey === 's') {
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i]
@@ -477,7 +503,12 @@ function animate() {
       } else {
         player.velocity.y = speed
       }
-    }
+        }
+        //Hack for init song
+        if (!songInit) {
+            songNormal.play()
+            songInit = true;
+        }
   } else if (keys.d.pressed && lastKey === 'd') {
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i]
@@ -498,13 +529,20 @@ function animate() {
       } else {
         player.velocity.x = speed
       }
-    }
+        }
+        //Hack for init song
+        if (!songInit) {
+            songNormal.play()
+            songInit = true;
+        }
   }
 
   // win condition goes here
   if (pellets.length === 0) {
-    console.log('you win')
-    cancelAnimationFrame(animationId)
+      console.log('you win')
+      var winSfx = new Audio("./sfx/LevelComplete.mp3");
+      winSfx.play();
+      cancelAnimationFrame(animationId)
   }
 
   // touch pellets here
@@ -523,23 +561,28 @@ function animate() {
         // Decreases stress 10%
         // Remove 15 percent
         pellets.splice(i, 1)
-        console.log(barHeight)
-
+         console.log(barHeight)
+         var waterSfx = new Audio("./sfx/water.mp3")
       }
       if (pellet.key == 'h') {
         // TODO: implement h logic
+          var healSfx = new Audio("./sfx/Hospital.mp3")
+          healSfx.play()
       } else if (pellet.key == 'p') {
         player.packages = 5
       } else {
         if (player.packages > 0) {
           pellets.splice(i, 1)
           score += 10
-          scoreEl.innerHTML = score 
+          scoreEl.innerHTML = score
           player.packages -= 1
+
+          boxSound = boxSfx[Math.floor(Math.random() * 3)]
+          boxSound.play();
         } else {
           console.log("You need more packages!")
-        }         
-      } 
+        }
+      }
     }
   }
 
@@ -595,6 +638,9 @@ function calculatePlayerSpeed() {
         if (barHeight >= 100) {
             status = "crisis"
             crisisMeterStart = Date.now()
+            painAudio.play()
+            songNormal.pause()
+            sadSong.play()
         }
     }
     else if (status == "crisis") {
@@ -602,6 +648,8 @@ function calculatePlayerSpeed() {
         if (currCrisis >= crisisMeterTime) {
             status = "crisisHealing"
             healMeterStart = Date.now()
+            sadSong.pause()
+            songNormal.play()
         }
         crisisTime.innerHTML = Math.round((crisisMeterTime - currCrisis) / 1000)
     }
