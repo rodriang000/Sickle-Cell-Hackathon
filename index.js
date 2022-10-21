@@ -21,7 +21,7 @@ var healMeterStart = Date.now()
 var crisisMeterStart = Date.now()
 var painMeterMaxTime = 30000
 var healMeterTime = 20000
-var crisisMeterTime = 40000
+var crisisMeterTime = 25000 // 40,000 ~ 40seconds
 var currPain
 
 var barHeight = 100
@@ -621,14 +621,15 @@ function calculatePlayerSpeed(speedKey) {
     // Only when status is stress increase should any of this logic occur
     if (status == "stressIncrease") {
       painMeterStart += 15000
-      if (painMeterStart - currPain >= 0) {
+
+      if (painMeterStart - Date.now() - currPain >= 0) {
         painMeterStart = Date.now()
       }
       return runNormalCalculation()
     }
   } else if (speedKey == 'h') {
     if (status == "crisis") {
-      crisisMeterStart = Date.now() - 2000000d
+      crisisMeterStart = Date.now() - 2000000
       var healSfx = new Audio("./sfx/Hospital.mp3")
       healSfx.play()
     }
@@ -638,6 +639,7 @@ function calculatePlayerSpeed(speedKey) {
 
 function runNormalCalculation(){
     // Normal logic
+    console.log(speed)
     let delta = Date.now() - timeStart; // milliseconds elapsed since start
     time.innerHTML = Math.round(delta / 1000);
     let bar = document.getElementById("painBar");
@@ -646,6 +648,10 @@ function runNormalCalculation(){
     currPain = Date.now() - painMeterStart;
     if (currPain > painMeterMaxTime) {
         currPain = painMeterMaxTime
+    }
+    
+    if (currPain < 0) {
+      currPain = 0
     }
 
     currHeal = Date.now() - healMeterStart;
@@ -688,9 +694,9 @@ function runNormalCalculation(){
   
     bar.style.height = 100 - barHeight + "%";
     bar.innerHTML = Math.round(barHeight) + "%";
-    speed = 4 - ( 4 * (barHeight /  100))
+    speed = 2.7 - ( 2.3 * (barHeight /  100))
     if (speed < .5) {
-        speed = .5
+        speed = .7
     }
     return speed
 }
