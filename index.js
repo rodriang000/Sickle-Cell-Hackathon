@@ -2,9 +2,18 @@ const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
 const scoreEl = document.querySelector('#scoreEl')
+const time = document.querySelector('#timer')
 
 canvas.width = 840
 canvas.height = 840
+
+// Timer Shenanigans
+//Beginning timers
+var timeStart = Date.now()
+var painMeterStart = Date.now()
+var painMeterMaxTime =  30000
+var timeElapsed = timeStart
+
 
 class Boundary {
   static width = 40
@@ -449,7 +458,8 @@ function animate() {
   animationId = requestAnimationFrame(animate)
   c.clearRect(0, 0, canvas.width, canvas.height)
 
-  if (keys.w.pressed && lastKey === 'w') {
+
+    if (keys.w.pressed && lastKey === 'w') {
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i]
       if (
@@ -578,6 +588,20 @@ function animate() {
   else if (player.velocity.x < 0) player.rotation = Math.PI
   else if (player.velocity.y > 0) player.rotation = Math.PI / 2
   else if (player.velocity.y < 0) player.rotation = Math.PI * 1.5
+
+  var delta = Date.now() - timeStart; // milliseconds elapsed since start
+  time.innerHTML = Math.round(delta / 1000);
+
+    var bar = document.getElementById("painBar");
+
+    var currPain = Date.now() - painMeterStart;
+    if (currPain > painMeterMaxTime) {
+        currPain = painMeterMaxTime
+    }
+
+    var barHeight = 100 * (currPain / painMeterMaxTime);
+    bar.style.height = 100-barHeight + "%";
+    bar.innerHTML = Math.round(barHeight) + "%";
 } // end of animate()
 
 animate()
