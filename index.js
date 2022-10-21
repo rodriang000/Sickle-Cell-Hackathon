@@ -8,6 +8,9 @@ const crisisTime = document.querySelector('#crisisTimer')
 canvas.width = 840
 canvas.height = 840
 
+var animateIndex = 0
+var faceLeft = false
+
 // Timer Shenanigans
 //Beginning timers
 var timeStart = Date.now()
@@ -25,6 +28,36 @@ var speed = 4
 
 var status = "stressIncrease"
 
+var spriteLA = new Image(32, 32)
+spriteLA.src = "./img/left-png/fnum1.png";
+var spriteLB = new Image(32, 32)
+spriteLB.src = "./img/left-png/fnum2.png";
+var spriteLC = new Image(32, 32)
+spriteLC.src = "./img/left-png/fnum3.png";
+var spriteLD = new Image(32, 32)
+spriteLD.src = "./img/left-png/fnum4.png";
+var spriteLE = new Image(32, 32)
+spriteLE.src = "./img/left-png/fnum5.png";
+var spriteLF = new Image(32, 32)
+spriteLF.src = "./img/left-png/fnum6.png";
+
+var spriteRA = new Image(32, 32)
+spriteRA.src = "./img/right-png/fnum1.png";
+var spriteRB = new Image(32, 32)
+spriteRB.src = "./img/right-png/fnum2.png";
+var spriteRC = new Image(32, 32)
+spriteRC.src = "./img/right-png/fnum3.png";
+var spriteRD = new Image(32, 32)
+spriteRD.src = "./img/right-png/fnum4.png";
+var spriteRE = new Image(32, 32)
+spriteRE.src = "./img/right-png/fnum5.png";
+var spriteRF = new Image(32, 32)
+spriteRF.src = "./img/right-png/fnum6.png";
+
+var hackyAnimationTime = Date.now()
+
+var spriteLeftArray = [spriteLA, spriteLB, spriteLC, spriteLD, spriteLE, spriteLF]
+var spriteRightArray = [spriteRA, spriteRB, spriteRC, spriteRD, spriteRE, spriteRF]
 
 class Boundary {
   static width = 40
@@ -55,24 +88,28 @@ class Player {
     this.rotation = 0
   }
 
-  draw() {
-    c.save()
-    c.translate(this.position.x, this.position.y)
-    c.rotate(this.rotation)
-    c.translate(-this.position.x, -this.position.y)
-    c.beginPath()
-    c.arc(
-      this.position.x,
-      this.position.y,
-      this.radius,
-      this.radians,
-      Math.PI * 2 - this.radians
-    )
-    c.lineTo(this.position.x, this.position.y)
-    c.fillStyle = 'yellow'
-    c.fill()
-    c.closePath()
-    c.restore()
+    draw() {
+        if (Date.now() - hackyAnimationTime > (200 / speed)) {
+         animateIndex++
+         if (animateIndex > 5) {
+             animateIndex = 0
+         }
+         hackyAnimationTime = Date.now()
+     }
+     if (this.velocity.x > 0) {
+         faceLeft = false
+     }
+     if (this.velocity.x < 0) {
+         faceLeft = true
+     }
+     if (faceLeft) {
+         c.drawImage(spriteLeftArray[animateIndex], this.position.x - 16,
+             this.position.y - 16)
+     }
+     else {
+         c.drawImage(spriteRightArray[animateIndex], this.position.x - 16,
+             this.position.y - 16)
+     }
   }
 
   update() {
