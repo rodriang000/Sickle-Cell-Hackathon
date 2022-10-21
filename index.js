@@ -18,11 +18,12 @@ var timeElapsed = timeStart
 class Boundary {
   static width = 40
   static height = 40
-  constructor({ position, image}) {
+  constructor({ position, image, key}) {
     this.position = position
     this.width = 40
     this.height = 40
     this.image = image
+    this.key = key
   }
 
   draw() {
@@ -76,9 +77,10 @@ class Player {
 
 
 class Pellet {
-  constructor({ position }) {
+  constructor({ position, coordinates}) {
     this.position = position
     this.radius = 3
+    this.coordinates = coordinates
   }
 
   draw() {
@@ -198,10 +200,12 @@ map.forEach((row, i) => {
                         x: Boundary.width * j,
                         y: Boundary.height * i,
                     },
-                    image: createImage('./img/house-south.png')
+                    image: createImage('./img/house-south.png'),
+                    key: 'S'
                 })
             )
             // console.log("S: ", "[", [i], ",", [j], "]" )
+            // console.log(boundaries.length - 1)
             break
         case 'N':
             boundaries.push(
@@ -210,10 +214,13 @@ map.forEach((row, i) => {
                         x: Boundary.width * j,
                         y: Boundary.height * i
                     },
-                    image: createImage('./img/house-north.png')
+                    image: createImage('./img/house-north.png'),
+                    key: 'N'
                 })
             )
             // console.log("N: ", "[", [i], ",", [j], "]" )
+            // console.log(boundaries.length - 1)
+
             break
         case 'E':
             boundaries.push(
@@ -222,11 +229,12 @@ map.forEach((row, i) => {
                         x: Boundary.width * j,
                         y: Boundary.height * i
                     },
-                    image: createImage('./img/house-east.png')
+                    image: createImage('./img/house-east.png'),
+                    key: 'E'
                 })
             )
             // console.log("E: ", "[", [i], ",", [j], "]" )
-
+            // console.log(boundaries.length - 1)
             break
         case 'W':
             boundaries.push(
@@ -239,6 +247,8 @@ map.forEach((row, i) => {
                 })
             )
             // console.log("W: ", "[", [i], ",", [j], "]" )
+            // console.log(boundaries.length - 1)
+
             break
         case 'H':
             boundaries.push(
@@ -425,7 +435,8 @@ map.forEach((row, i) => {
             position: {
               x: j * Boundary.width + Boundary.width / 2,
               y: i * Boundary.height + Boundary.height / 2
-            }
+            },
+            coordinates: i.toString() + "," + j.toString()
           })
         )
         break
