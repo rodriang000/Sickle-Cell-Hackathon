@@ -3,6 +3,7 @@ const c = canvas.getContext('2d')
 
 const scoreEl = document.querySelector('#scoreEl')
 const time = document.querySelector('#timer')
+const crisisTime = document.querySelector('#crisisTimer')
 
 canvas.width = 840
 canvas.height = 840
@@ -10,9 +11,19 @@ canvas.height = 840
 // Timer Shenanigans
 //Beginning timers
 var timeStart = Date.now()
-var painMeterStart = Date.now()
-var painMeterMaxTime =  30000
 var timeElapsed = timeStart
+
+var painMeterStart = Date.now()
+var healMeterStart = Date.now()
+var crisisMeterStart = Date.now()
+var painMeterMaxTime = 30000
+var healMeterTime = 20000
+var crisisMeterTime = 40000
+
+var barHeight = 100
+var speed = 4
+
+var status = "stressIncrease"
 
 
 class Boundary {
@@ -474,7 +485,20 @@ function animate() {
   animationId = requestAnimationFrame(animate)
   c.clearRect(0, 0, canvas.width, canvas.height)
 
-
+    //constantly updates speed of current direction.
+    if (player.velocity.x > 0) {
+        player.velocity.x = speed
+    }
+    if (player.velocity.x < 0) {
+        player.velocity.x = -speed
+    }
+    if (player.velocity.y > 0) {
+        player.velocity.y = speed
+    }
+    if (player.velocity.y < 0) {
+        player.velocity.y = -speed
+    }
+    //Does legit updates
     if (keys.w.pressed && lastKey === 'w') {
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i]
@@ -484,7 +508,7 @@ function animate() {
             ...player,
             velocity: {
               x: 0,
-              y: -5
+              y: -speed
             }
           },
           rectangle: boundary
@@ -493,7 +517,7 @@ function animate() {
         player.velocity.y = 0
         break
       } else {
-        player.velocity.y = -5
+          player.velocity.y = -speed
       }
     }
   } else if (keys.a.pressed && lastKey === 'a') {
@@ -504,7 +528,7 @@ function animate() {
           circle: {
             ...player,
             velocity: {
-              x: -5,
+              x: -speed,
               y: 0
             }
           },
@@ -514,7 +538,7 @@ function animate() {
         player.velocity.x = 0
         break
       } else {
-        player.velocity.x = -5
+          player.velocity.x = -speed
       }
     }
   } else if (keys.s.pressed && lastKey === 's') {
@@ -526,7 +550,7 @@ function animate() {
             ...player,
             velocity: {
               x: 0,
-              y: 5
+              y: speed
             }
           },
           rectangle: boundary
@@ -535,7 +559,7 @@ function animate() {
         player.velocity.y = 0
         break
       } else {
-        player.velocity.y = 5
+        player.velocity.y = speed
       }
     }
   } else if (keys.d.pressed && lastKey === 'd') {
@@ -546,7 +570,7 @@ function animate() {
           circle: {
             ...player,
             velocity: {
-              x: 5,
+              x: speed,
               y: 0
             }
           },
@@ -556,7 +580,7 @@ function animate() {
         player.velocity.x = 0
         break
       } else {
-        player.velocity.x = 5
+        player.velocity.x = speed
       }
     }
   }
@@ -615,9 +639,45 @@ function animate() {
         currPain = painMeterMaxTime
     }
 
-    var barHeight = 100 * (currPain / painMeterMaxTime);
-    bar.style.height = 100-barHeight + "%";
+    var currHeal = Date.now() - healMeterStart;
+    if (currHeal > healMeterTime) {
+        currHeal = healMeterTime
+    }
+
+    var currCrisis = Date.now() - crisisMeterStart;
+    if (currCrisis > crisisMeterTime) {
+        currCrisis = crisisMeterTime
+    }
+
+    if (status == "stressIncrease") {
+        barHeight = 100 * (currPain / painMeterMaxTime);
+        if (barHeight >= 100) {
+            status = "crisis"
+            crisisMeterStart = Date.now()
+        }
+    }
+    else if (status == "crisis") {
+        barHeight = 100
+        if (currCrisis >= crisisMeterTime) {
+            status = "crisisHealing"
+            healMeterStart = Date.now()
+        }
+        crisisTime.innerHTML = Math.round((crisisMeterTime - currCrisis) / 1000)
+    }
+    else if (status == "crisisHealing") {
+        barHeight = 100 - (100* (currHeal / healMeterTime))
+        if (barHeight <= 0) {
+            status = "stressIncrease"
+            painMeterStart = Date.now()
+        }
+    }
+
+    bar.style.height = 100 - barHeight + "%";
     bar.innerHTML = Math.round(barHeight) + "%";
+    speed = 4 - ( 4 * (barHeight /  100))
+    if (speed < .5) {
+        speed = .5
+    }
 } // end of animate()
 
 animate()
