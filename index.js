@@ -7,9 +7,6 @@ const crisisTime = document.querySelector('#crisisTimer')
 canvas.width = 840
 canvas.height = 840
 
-var animateIndex = 0
-var faceLeft = false
-
 // Timer Shenanigans
 //Beginning timers
 var timeStart = Date.now()
@@ -20,54 +17,52 @@ var crisisMeterStart = Date.now()
 var painMeterMaxTime = 30000
 var healMeterTime = 20000
 var crisisMeterTime = 25000 // 40,000 ~ 40seconds
-var currPain
+var hackyAnimationTime = Date.now()
 
 var barHeight = 100
 var speed = 4
-
+var currPain
+var animateIndex = 0
+var faceLeft = false
 var status = "stressIncrease"
 
 var spriteLA = new Image(32, 32)
-spriteLA.src = "./img/left-png/fnum1.png";
 var spriteLB = new Image(32, 32)
-spriteLB.src = "./img/left-png/fnum2.png";
 var spriteLC = new Image(32, 32)
-spriteLC.src = "./img/left-png/fnum3.png";
 var spriteLD = new Image(32, 32)
-spriteLD.src = "./img/left-png/fnum4.png";
 var spriteLE = new Image(32, 32)
-spriteLE.src = "./img/left-png/fnum5.png";
 var spriteLF = new Image(32, 32)
-spriteLF.src = "./img/left-png/fnum6.png";
 
 var spriteRA = new Image(32, 32)
-spriteRA.src = "./img/right-png/fnum1.png";
 var spriteRB = new Image(32, 32)
-spriteRB.src = "./img/right-png/fnum2.png";
 var spriteRC = new Image(32, 32)
-spriteRC.src = "./img/right-png/fnum3.png";
 var spriteRD = new Image(32, 32)
-spriteRD.src = "./img/right-png/fnum4.png";
 var spriteRE = new Image(32, 32)
-spriteRE.src = "./img/right-png/fnum5.png";
 var spriteRF = new Image(32, 32)
+
+spriteLA.src = "./img/left-png/fnum1.png";
+spriteLB.src = "./img/left-png/fnum2.png";
+spriteLC.src = "./img/left-png/fnum3.png";
+spriteLD.src = "./img/left-png/fnum4.png";
+spriteLE.src = "./img/left-png/fnum5.png";
+spriteLF.src = "./img/left-png/fnum6.png";
+
+spriteRA.src = "./img/right-png/fnum1.png";
+spriteRB.src = "./img/right-png/fnum2.png";
+spriteRC.src = "./img/right-png/fnum3.png";
+spriteRD.src = "./img/right-png/fnum4.png";
+spriteRE.src = "./img/right-png/fnum5.png";
 spriteRF.src = "./img/right-png/fnum6.png";
 
-var hackyAnimationTime = Date.now()
-
+// Audio setup
 var boxSfx = [new Audio("./sfx/box1.mp3"), new Audio("./sfx/box2.mp3"), new Audio("./sfx/box3.mp3")]
-
 var songNormal = new Audio("./sfx/songNormal.mp3")
 songNormal.volume = 0.1
 songNormal.loop = true
-
 var songInit = false
-
 var sadSong = new Audio("./sfx/sadSong.mp3")
 sadSong.volume = 0.1
 sadSong.loop = true
-
-
 var painAudio = new Audio("./sfx/pain.wav")
 
 var spriteLeftArray = [spriteLA, spriteLB, spriteLC, spriteLD, spriteLE, spriteLF]
@@ -238,26 +233,10 @@ const map = [
     ['g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g']
 ]
 
-function createImage(src) {
-  const image = new Image()
-  image.src = src
-  return image
-}
 
 map.forEach((row, i) => {
   row.forEach((symbol, j) => {
     switch (symbol) {
-      case '-':
-        boundaries.push(
-          new Boundary({
-            position: {
-              x: Boundary.width * j,
-              y: Boundary.height * i
-            },
-            image: createImage('./img/pipeHorizontal.png')
-          })
-        )
-        break
       case 'g':
         boundaries.push(
           new Boundary({
@@ -280,8 +259,6 @@ map.forEach((row, i) => {
                     key: 'S'
                 })
             )
-            // console.log("S: ", "[", [i], ",", [j], "]" )
-            // console.log(boundaries.length - 1)
             break
         case 'N':
             boundaries.push(
@@ -294,9 +271,6 @@ map.forEach((row, i) => {
                     key: 'N'
                 })
             )
-            // console.log("N: ", "[", [i], ",", [j], "]" )
-            // console.log(boundaries.length - 1)
-
             break
         case 'E':
             boundaries.push(
@@ -309,8 +283,6 @@ map.forEach((row, i) => {
                     key: 'E'
                 })
             )
-            // console.log("E: ", "[", [i], ",", [j], "]" )
-            // console.log(boundaries.length - 1)
             break
         case 'W':
             boundaries.push(
@@ -322,9 +294,6 @@ map.forEach((row, i) => {
                     image: createImage('./img/house-west.png')
                 })
             )
-            // console.log("W: ", "[", [i], ",", [j], "]" )
-            // console.log(boundaries.length - 1)
-
             break
         case 'H':
             boundaries.push(
@@ -396,20 +365,8 @@ map.forEach((row, i) => {
   })
 })
 
-function circleCollidesWithRectangle({ circle, rectangle }) {
-  const padding = Boundary.width / 2 - circle.radius - 1
-  return (
-    circle.position.y - circle.radius + circle.velocity.y <=
-      rectangle.position.y + rectangle.height + padding &&
-    circle.position.x + circle.radius + circle.velocity.x >=
-      rectangle.position.x - padding &&
-    circle.position.y + circle.radius + circle.velocity.y >=
-      rectangle.position.y - padding &&
-    circle.position.x - circle.radius + circle.velocity.x <=
-      rectangle.position.x + rectangle.width + padding
-  )
-}
 
+// Functions
 let animationId
 function animate() {
   animationId = requestAnimationFrame(animate)
@@ -608,6 +565,26 @@ function animate() {
 } // end of animate()
 animate()
 
+function createImage(src) {
+  const image = new Image()
+  image.src = src
+  return image
+}
+
+function circleCollidesWithRectangle({ circle, rectangle }) {
+  const padding = Boundary.width / 2 - circle.radius - 1
+  return (
+    circle.position.y - circle.radius + circle.velocity.y <=
+      rectangle.position.y + rectangle.height + padding &&
+    circle.position.x + circle.radius + circle.velocity.x >=
+      rectangle.position.x - padding &&
+    circle.position.y + circle.radius + circle.velocity.y >=
+      rectangle.position.y - padding &&
+    circle.position.x - circle.radius + circle.velocity.x <=
+      rectangle.position.x + rectangle.width + padding
+  )
+}
+
 function calculatePlayerSpeed(speedKey) {
   // console.log(speedKey)
   if (speedKey == ' ')
@@ -697,8 +674,9 @@ function runNormalCalculation(){
     }
     return speed
 }
+
 addEventListener('keydown', ({ key }) => {
-  switch (key) {
+  switch (key.toLowerCase()) {
     case 'w':
       keys.w.pressed = true
       lastKey = 'w'
@@ -719,7 +697,7 @@ addEventListener('keydown', ({ key }) => {
 })
 
 addEventListener('keyup', ({ key }) => {
-  switch (key) {
+  switch (key.toLowerCase()) {
     case 'w':
       keys.w.pressed = false
 
