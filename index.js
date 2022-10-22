@@ -208,7 +208,6 @@ const keys = {
 
 let lastKey = ''
 
-
 const map = [
     ['g', 'P', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g'],
     ['g', 'p', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '.', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'g'],
@@ -248,75 +247,75 @@ map.forEach((row, i) => {
           })
         )
         break
-        case 'S':
-            boundaries.push(
-                new Boundary({
-                    position: {
-                        x: Boundary.width * j,
-                        y: Boundary.height * i,
-                    },
-                    image: createImage('./img/house-south.png'),
-                    key: 'S'
-                })
-            )
-            break
-        case 'N':
-            boundaries.push(
-                new Boundary({
-                    position: {
-                        x: Boundary.width * j,
-                        y: Boundary.height * i
-                    },
-                    image: createImage('./img/house-north.png'),
-                    key: 'N'
-                })
-            )
-            break
-        case 'E':
-            boundaries.push(
-                new Boundary({
-                    position: {
-                        x: Boundary.width * j,
-                        y: Boundary.height * i
-                    },
-                    image: createImage('./img/house-east.png'),
-                    key: 'E'
-                })
-            )
-            break
-        case 'W':
-            boundaries.push(
-                new Boundary({
-                    position: {
-                        x: Boundary.width * j,
-                        y: Boundary.height * i
-                    },
-                    image: createImage('./img/house-west.png')
-                })
-            )
-            break
-        case 'H':
-            boundaries.push(
-                new Boundary({
-                    position: {
-                        x: Boundary.width * j,
-                        y: Boundary.height * i
-                    },
-                    image: createImage('./img/hospital.png')
-                })
-            )
-            break
-        case 'P':
-            boundaries.push(
-                new Boundary({
-                    position: {
-                        x: Boundary.width * j,
-                        y: Boundary.height * i
-                    },
-                    image: createImage('./img/home.png')
-                })
-            )
-            break
+      case 'S':
+          boundaries.push(
+              new Boundary({
+                  position: {
+                      x: Boundary.width * j,
+                      y: Boundary.height * i,
+                  },
+                  image: createImage('./img/house-south.png'),
+                  key: 'S'
+              })
+          )
+          break
+      case 'N':
+          boundaries.push(
+              new Boundary({
+                  position: {
+                      x: Boundary.width * j,
+                      y: Boundary.height * i
+                  },
+                  image: createImage('./img/house-north.png'),
+                  key: 'N'
+              })
+          )
+          break
+      case 'E':
+          boundaries.push(
+              new Boundary({
+                  position: {
+                      x: Boundary.width * j,
+                      y: Boundary.height * i
+                  },
+                  image: createImage('./img/house-east.png'),
+                  key: 'E'
+              })
+          )
+          break
+      case 'W':
+          boundaries.push(
+              new Boundary({
+                  position: {
+                      x: Boundary.width * j,
+                      y: Boundary.height * i
+                  },
+                  image: createImage('./img/house-west.png')
+              })
+          )
+      break
+      case 'H':
+          boundaries.push(
+              new Boundary({
+                  position: {
+                      x: Boundary.width * j,
+                      y: Boundary.height * i
+                  },
+                  image: createImage('./img/hospital.png')
+              })
+          )
+          break
+      case 'P':
+          boundaries.push(
+              new Boundary({
+                  position: {
+                      x: Boundary.width * j,
+                      y: Boundary.height * i
+                  },
+                  image: createImage('./img/home.png')
+              })
+          )
+          break
       case '.':
         pellets.push(
           new Pellet({
@@ -367,7 +366,8 @@ map.forEach((row, i) => {
 
 
 // Functions
-let animationId
+var animationId
+
 function animate() {
   animationId = requestAnimationFrame(animate)
   let speedKey = " "
@@ -675,6 +675,7 @@ function runNormalCalculation(){
     return speed
 }
 
+//Event listeners
 addEventListener('keydown', ({ key }) => {
   switch (key.toLowerCase()) {
     case 'w':
